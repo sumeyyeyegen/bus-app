@@ -19,8 +19,89 @@ a {
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
   }
+}
+
+#header .categories .menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-block;
+  border-radius: 100px;
+}
+
+#header .categories {
+  line-height: 4.5em;
+}
+
+#header .categories.container {
+  padding: 0 2.5em;
+}
+
+#header .categories .menu li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+#header .categories .menu li {
+  position: relative;
+  transition: .2s;
+  font-size: 1.15em;
+  font-weight: 500;
+  color: #616c72;
+  border: 1px solid #b3b3b2;
+  outline: 0;
+  padding: 0 1.2em;
+  border-radius: 1.6em;
+  cursor: pointer;
+  line-height: 42px;
+  height: 43px;
+  display: inline-block;
+  min-width: 3.5em;
+  /* background: #f6f7f8; */
+}
+
+.card {
+  border-color: #b3b3b2;
+  ;
+}
+
+#header .categories .menu li:hover {
+  background-color: #FD0F00;
+  color: #fff;
+  border: #FD0F00;
+}
+
+
+.container {
+  margin: 0 auto;
+  max-width: 73em;
+}
+
+#header div.header-row-2 {
+  /* background-color: #f6f7f8; */
+}
+
+#header div.header-row-1 {
+  background-color: #FD0F00;
+  height: 5em;
+}
+
+#header .menu.right {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1em;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 100%;
+}
+
+#header div.header-row-1 .container>* {
+  flex: 1;
 }
