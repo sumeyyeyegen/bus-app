@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
 
-const url = "http://localhost:83/api"
+const url = "http://localhost:82/api"
 
 interface Values {
   plate_number: string,

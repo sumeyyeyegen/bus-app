@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   // const authorization = Cookies.get("token");
   const requestOptions: Object = {
     method: 'GET',
-    url: "http://localhost:83/api/bus-definition",
+    url: "http://localhost:82/api/bus-definition",
     headers: {
       'Content-Type': 'application/json',
       "Authorization": authorization
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   // const requestOptionById: Object = {
   //   method: 'GET',
-  //   url: `http://localhost:83/api/model/${id}`,
+  //   url: `http://localhost:82/api/model/${id}`,
   //   headers: {
   //     'Content-Type': 'application/json',
   //     "Authorization": authorization

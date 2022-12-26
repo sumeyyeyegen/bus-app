@@ -37,7 +37,7 @@ const ExpeditionDef = () => {
     { id: 1, name: "İzmir" },
     { id: 2, name: "Denizli" },
     { id: 3, name: "İstanbul" },
-    { id: 3, name: "Ankara" },
+    { id: 4, name: "Ankara" },
   ])
 
   const validationSchema = Yup.object().shape({

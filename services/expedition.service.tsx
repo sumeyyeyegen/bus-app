@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { fetchWrapper } from '../helpers';
 import { Dayjs } from 'dayjs';
 
-const url = "http://localhost:83/api"
+const url = "http://localhost:82/api"
 
 interface Values {
   bus: Object,

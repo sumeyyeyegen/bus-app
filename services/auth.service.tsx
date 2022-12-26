@@ -4,12 +4,13 @@ import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
 
-const url = "http://localhost:83/api"
+const url = "http://localhost:82/api"
 
 const userSubject = new BehaviorSubject(process.browser && typeof window !== "undefined" && localStorage.getItem('user-data') !== null && localStorage.getItem('user-data') !== undefined && localStorage.getItem('user-data'))
 
 interface Values {
-    email: string,
+    username: string,
+    //TODO: email: string,
     password: string
 }
 
@@ -29,7 +30,8 @@ const setCookie = (res: any) => {
 }
 
 function login(data: Values) {
-    return fetchWrapper.post(`${url}/auth/login`, undefined, data).then((res: any) => {
+    //TODO: yeni backend için (/auth) eklenmeli
+    return fetchWrapper.post(`${url}/login`, undefined, data).then((res: any) => {
         userSubject.next(res.data);
         localStorage.setItem('user-data', JSON.stringify(res.data));
         setCookie(res);
@@ -47,7 +49,3 @@ function logout() {
     userSubject.next(null);
     Router.push('/login');
 }
-
-// function getAll() {
-//     return fetchWrapper.get(baseUrl);
-// }
