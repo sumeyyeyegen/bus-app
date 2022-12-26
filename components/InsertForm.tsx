@@ -134,7 +134,7 @@ const InsertForm = () => {
                         value={selectedBrand}
                         label="Marka"
                         {...register("brand")}
-                        onChange={(e) => handleChangeBrand(e)}
+                        onChange={(e) =>{ handleChangeBrand(e)}}
                       >
                         {
                           brandList.length > 0 ? brandList.map((brand: any) => {

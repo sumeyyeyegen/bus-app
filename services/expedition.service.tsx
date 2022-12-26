@@ -12,7 +12,7 @@ interface Values {
   fee: number | string,
   from: number | string,
   to: number | string,
-  date: Dayjs | null
+  date: string | null
 }
 
 export const expeditionService = {

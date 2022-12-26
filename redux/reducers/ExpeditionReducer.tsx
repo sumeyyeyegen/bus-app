@@ -12,11 +12,11 @@ interface ExpeditionState {
 
 const initialState: ExpeditionState = {
   expeditionInsertRes: "",
-  selectedBus: {},
+  selectedBus: "",
   fee: "",
   fromProvince: "",
   toProvince: "",
-  dateExp: dayjs(new Date()),
+  dateExp: null
 }
 export const expeditionReducer = createSlice({
   name: 'expedition',

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik, Form } from 'formik';
 import { useForm } from 'react-hook-form';
 import { expeditionService } from '../services/expedition.service';
@@ -9,11 +9,10 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { setDateExp, setExpeditionInsertRes, setFee, setFromProvince, setSelectedBus, setToProvince } from '../redux/reducers/ExpeditionReducer';
 import { FormItem } from './FormItem';
 
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers';
 
 interface Values {
@@ -41,14 +40,15 @@ const ExpeditionDef = () => {
   ])
 
   const validationSchema = Yup.object().shape({
-    model_id: Yup.number()
-      .required("Model seçiniz"),
-    number_of_seats: Yup.number()
-      .required("Koltuk sayısı giriniz"),
-    type: Yup.number()
-      .required("Zorunlu alan"),
-    properties: Yup.array()
-      .required("Özellik seçiniz")
+    bus: Yup.number()
+      .required("Otobüs seçiniz"),
+    fee: Yup.number()
+      .required("Koltuk ücreti giriniz"),
+    from: Yup.number()
+      .required("Başlangıç noktası seçiniz"),
+    to: Yup.number()
+      .required("Varış noktası seçiniz")
+    // date: Yup.date().required("Tarih ve saat giriniz")
   });
 
   const handleChangeBus = (e: any) => {
@@ -75,11 +75,27 @@ const ExpeditionDef = () => {
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const { register, handleSubmit, reset, setError, formState } = useForm(formOptions);
-  const { errors } = formState;
+  const { errors, isSubmitting } = formState;
+  console.log(isSubmitting);
 
   function onSubmit(data: Values) {
     console.log("data", data)
-    let dat = { bus: data.bus, fee: data.fee, from: data.from, to: data.to, date: data.date };
+    let newDate = JSON.stringify(dateExp.$d).split("");
+    console.log(newDate);
+    let bashData = newDate.splice(1, 10).join().replaceAll(",", "");
+    let hour = newDate.splice(2, 8).join().replaceAll(",", "");
+    console.log(bashData);
+    console.log(hour)
+
+    const [year, month, day] = bashData.split("-");
+
+    const result = [day, month, year].join('/');
+    console.log(result + hour);
+
+    let dat = {
+      bus: { id: data.bus }, fee: data.fee, from: data.from, to: data.to, date: result
+      // + " " + hour
+    };
     return expeditionService.insertExpedition(dat)
       .then((res: any) => {
         dispatch(setExpeditionInsertRes(res.data));
@@ -89,11 +105,15 @@ const ExpeditionDef = () => {
       });
   }
 
+  useEffect(() => {
+    console.log(dateExp);
+
+  }, [dateExp])
 
   return (
     <Formik
-      initialValues={{ bus: {}, fee: '', from: "", to: "", date: null }}
-      onSubmit={(values: Values) => onSubmit(values)}
+      initialValues={{ bus: "", fee: '', from: "", to: "", date: null }}
+      onSubmit={(values: Values) => { console.log(values); onSubmit(values) }}
       validationSchema={validationSchema}
     >
       {formik => {
@@ -117,7 +137,9 @@ const ExpeditionDef = () => {
                       >
                         {
                           busList.length > 0 ? busList.map((bus: any) => {
-                            return <MenuItem key={bus.id} value={bus.id}>{bus.plate_number}</MenuItem>
+                            return <MenuItem key={bus.id} value={bus.id}>
+                              {/* TODO: bus.plate_number */}
+                              {bus.plateNumber}</MenuItem>
                           }) : ""
                         }
 
@@ -137,7 +159,7 @@ const ExpeditionDef = () => {
                         value={fromProvince}
                         label="Nereden"
                         {...register("from")}
-                        onChange={(e) => handleFromProvince(e)}
+                        onChange={(e) => { handleChange(e); handleFromProvince(e) }}
                       >
                         {
                           provinceList.length > 0 ? provinceList.map((province: any) => {
@@ -175,25 +197,23 @@ const ExpeditionDef = () => {
                       <DateTimePicker
                         label="Tarih"
                         value={dateExp}
+                        {...register("date")}
                         onChange={(newValue) => {
+                          handleChange(JSON.stringify(newValue.$d))
                           dispatch(setDateExp(newValue));
                         }}
                         renderInput={(params) => <TextField {...params} />}
                       />
                     </LocalizationProvider>
                   </div>
-
-
-                  {
-                    <button
-                      // disabled={formState.isSubmitting}
-                      type="submit"
-                      className="btn btn-primary">
-                      {formState.isSubmitting &&
-                        <span className="spinner-border spinner-border-sm mr-1"></span>}
-                      Ekle
-                    </button>
-                  }
+                  <button
+                    disabled={formState.isSubmitting}
+                    type="submit"
+                    className="btn btn-primary">
+                    {formState.isSubmitting &&
+                      <span className="spinner-border spinner-border-sm mr-1"></span>}
+                    Ekle
+                  </button>
                 </Form>
               </div>
             </div>

@@ -89,6 +89,14 @@ a {
 #header div.header-row-1 {
   background-color: #FD0F00;
   height: 5em;
+  padding-left: 5em;
+  padding-right: 5em;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: #fff;
+  font-size: 1.1em;
+
 }
 
 #header .menu.right {
