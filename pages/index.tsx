@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState, FC } from 'react';
 import { useDispatch } from 'react-redux';
 import BusIdentification from '../components/BusIdentification';
+import ExpeditionDef from '../components/ExpeditionDef';
 import { fetchWrapper } from '../helpers';
 import { setBrandList, setModelList, setPropList, setTypeList } from '../redux/reducers/BusReducer';
 
@@ -23,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   // const authorization = Cookies.get("token");
   const requestOptions: Object = {
     method: 'GET',
-    url: "http://localhost:82/api/bus-definition",
+    url: "http://localhost:83/api/bus-definition",
     headers: {
       'Content-Type': 'application/json',
       "Authorization": authorization
@@ -34,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   // const requestOptionById: Object = {
   //   method: 'GET',
-  //   url: `http://localhost:82/api/model/${id}`,
+  //   url: `http://localhost:83/api/model/${id}`,
   //   headers: {
   //     'Content-Type': 'application/json',
   //     "Authorization": authorization
@@ -62,7 +63,8 @@ const Home: FC<any> = ({ allBrands, allProps, allTypes }) => {
 
   useEffect(() => {
     let control = authService.userValue.getValue();
-    if (control === false || control === null) {
+    let token = Cookies.get("user-token");
+    if (control === false || control === null || token === null || token === undefined || token === "") {
       router.push('/login');
     }
   }, [])
@@ -91,7 +93,7 @@ const Home: FC<any> = ({ allBrands, allProps, allTypes }) => {
       <div className="card">
         <div className="card-body">
           {
-            activeTab === "tab1" ? <BusIdentification /> : activeTab === "tab2" ? "" : ""
+            activeTab === "tab1" ? <BusIdentification /> : activeTab === "tab2" ? <ExpeditionDef /> : ""
           }
 
         </div>

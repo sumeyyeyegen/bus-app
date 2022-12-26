@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
 
-const url = "http://localhost:82/api"
+const url = "http://localhost:83/api"
 
 interface Values {
   plate_number: string,
@@ -23,7 +23,8 @@ interface ValuesNewData {
 }
 
 export const busService = {
-  insertBus
+  insertBus,
+  updateBus
 };
 
 function insertBus(data: Values) {
@@ -39,6 +40,15 @@ function insertBus(data: Values) {
   });
 }
 
-// function getAll() {
-//     return fetchWrapper.get(baseUrl);
-// }
+function updateBus(data: Values) {
+  let newData: ValuesNewData = { plate_number: data.plate_number, model_id: Number(data.model_id), number_of_seats: Number(data.number_of_seats), type: Number(data.type), properties: [] };
+  for (let i = 0; i < data.properties.length; i++) {
+    newData.properties.push({ id: data.properties[i] })
+  }
+  let token = Cookies.get("user-token");
+  return fetchWrapper.put(`${url}/bus-definition`, token, newData).then((res: any) => {
+    console.log(res);
+    return res;
+  });
+}
+

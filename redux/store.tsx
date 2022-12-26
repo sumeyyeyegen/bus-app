@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import busReducer from './reducers/BusReducer'
+import expeditionReducer from './reducers/ExpeditionReducer'
+import graphReducer from './reducers/GraphReducer'
 import homeReducer from './reducers/HomeReducer'
 
 const store = configureStore({
   reducer: {
     home: homeReducer,
-    bus: busReducer
+    bus: busReducer,
+    graph: graphReducer,
+    expedition: expeditionReducer
   }
 })
 

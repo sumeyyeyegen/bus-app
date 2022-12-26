@@ -10,7 +10,13 @@ interface BusState {
   brandList: any,
   propList: any,
   typeList: any,
-  modelList: any
+  modelList: any,
+  busInsertRes: any,
+  edit: boolean,
+  seatNumber: any,
+  busUpdateRes: any,
+  plateList: Array<any>,
+  plateNumber: any
 }
 
 // Define the initial state using that type
@@ -22,14 +28,20 @@ const initialState: BusState = {
   brandList: [],
   propList: [],
   typeList: [],
-  modelList: []
+  modelList: [],
+  busInsertRes: "",
+  edit: false,
+  seatNumber: "",
+  busUpdateRes: "",
+  plateList: [],
+  plateNumber: ""
 }
 
 export const fetchModelById = createAsyncThunk(
   'bus/fetchById',
   async (brandId: any, thunkAPI) => {
     let token: any = Cookies.get("user-token");
-    const response = await fetchWrapper.get(`http://localhost:82/api/model/${brandId}`, token);
+    const response = await fetchWrapper.get(`http://localhost:83/api/model/${brandId}`, token);
     return response.data.model
   }
 )
@@ -61,6 +73,24 @@ export const busReducer = createSlice({
     },
     setModelList: (state, payload) => {
       state.modelList = payload.payload;
+    },
+    setBusInsertRes: (state, payload) => {
+      state.busInsertRes = payload.payload;
+    },
+    setEdit: (state, payload) => {
+      state.edit = payload.payload;
+    },
+    setSeatNumber: (state, payload) => {
+      state.seatNumber = payload.payload
+    },
+    setBusUpdateRes: (state, payload) => {
+      state.busUpdateRes = payload.payload;
+    },
+    setPlateList: (state, payload) => {
+      state.plateList = payload.payload;
+    },
+    setPlateNumber: (state, payload) => {
+      state.plateNumber = payload.payload;
     }
   },
 
@@ -77,6 +107,6 @@ export const busReducer = createSlice({
   }
 })
 
-export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType } = busReducer.actions
+export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setPlateList, setPlateNumber } = busReducer.actions
 
 export default busReducer.reducer

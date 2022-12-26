@@ -21,8 +21,9 @@ function get(url: string, token: string) {
 function post(url: string, token: string | undefined, body: object) {
   let header = token !== undefined ? {
     'Content-Type': 'application/json',
+    "Access-Control-Allow-Origin": "*",
     "Authorization": token
-  } : { 'Content-Type': 'application/json' }
+  } : { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" }
 
   const requestOptions: Object = {
     method: 'POST',

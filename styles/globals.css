@@ -105,3 +105,29 @@ a {
 #header div.header-row-1 .container>* {
   flex: 1;
 }
+
+
+
+
+/* ---------------------------------------- */
+
+
+.otobus-div {
+  margin: 25px 0px;
+  display: table-cell;
+}
+
+.koltuk-sira {
+  padding: 0;
+  display: flex;
+}
+
+.koltuk {
+  border: 1px solid black;
+  margin-bottom: 5px;
+  height: 57px;
+  text-align: center;
+  line-height: 57px;
+  font-size: 18px;
+  font-weight: 600;
+}

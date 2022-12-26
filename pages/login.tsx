@@ -11,7 +11,7 @@ import { FormItem } from '../components';
 export default Login;
 
 interface Values {
-  username: string,
+  email: string,
   password: string
 }
 
@@ -29,9 +29,11 @@ function Login() {
   }, []);
 
   // form validation rules 
+
+  let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required("Kullanıcı adı zorunludur"),
+    email: Yup.string().email("Geçerli bir email giriniz").matches(regex, "Geçerli bir email giriniz")
+      .required("Email girilmesi zorunludur"),
     password: Yup.string()
       .required("Şifre girilmesi zorunludur")
   });
@@ -41,7 +43,7 @@ function Login() {
   const { errors } = formState;
 
   function onSubmit(data: Values) {
-    let dat = { username: data.username, password: data.password }
+    let dat = { email: data.email, password: data.password }
     return authService.login(dat)
       .then((res) => {
         // get return url from query parameters or default to '/'
@@ -56,7 +58,7 @@ function Login() {
   return (
     <Formik
       validationSchema={validationSchema}
-      initialValues={{ username: '', password: '' }}
+      initialValues={{ email: '', password: '' }}
       onSubmit={(values: Values) => onSubmit(values)}
     >
       {formik => {
@@ -67,7 +69,7 @@ function Login() {
               <div className="card-body">
                 <Form >
                   <div className="form-group">
-                    <FormItem errors={errors.username} isValid={isValid} touched={touched.username} formik={formik.errors.username} type="username" values={values.username} handleChange={handleChange} text="Kullanıcı Adı" />
+                    <FormItem errors={errors.email} isValid={isValid} touched={touched.email} formik={formik.errors.email} type="email" values={values.email} handleChange={handleChange} text="Email" />
                   </div>
                   <div className="form-group">
                     <FormItem errors={errors.password} isValid={isValid} touched={touched.password} formik={formik.errors.password} type="password" values={values.password} handleChange={handleChange} text="Şifre" />
