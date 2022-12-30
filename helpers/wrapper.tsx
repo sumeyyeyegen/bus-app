@@ -8,7 +8,7 @@ export const fetchWrapper = {
   delete: deleteReq
 };
 
-function get(url: string, token: string) {
+function get(url: string, token: string|undefined) {
   const requestOptions: Object = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', "Authorization": token },

@@ -6,7 +6,9 @@ interface ExpeditionState {
   fee: number | string,
   fromProvince: number | string,
   toProvince: number | string,
-  dateExp: Dayjs | null
+  dateExp: Dayjs | null | Date,
+  locationList: Array<any>,
+  voyageList: Array<any>
 }
 
 
@@ -16,7 +18,9 @@ const initialState: ExpeditionState = {
   fee: "",
   fromProvince: "",
   toProvince: "",
-  dateExp: null
+  dateExp: new Date(),
+  locationList: [],
+  voyageList: []
 }
 export const expeditionReducer = createSlice({
   name: 'expedition',
@@ -39,6 +43,12 @@ export const expeditionReducer = createSlice({
     },
     setDateExp: (state, payload) => {
       state.dateExp = payload.payload;
+    },
+    setLocationList: (state, payload) => {
+      state.locationList = payload.payload;
+    },
+    setVoyageList: (state, payload) => {
+      state.voyageList = payload.payload;
     }
   },
 
@@ -47,6 +57,6 @@ export const expeditionReducer = createSlice({
   }
 })
 
-export const { setExpeditionInsertRes, setSelectedBus, setFee, setFromProvince, setToProvince, setDateExp } = expeditionReducer.actions
+export const { setExpeditionInsertRes, setSelectedBus, setFee, setFromProvince, setToProvince, setDateExp, setLocationList, setVoyageList } = expeditionReducer.actions
 
 export default expeditionReducer.reducer

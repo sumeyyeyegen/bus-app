@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Formik, Form } from 'formik';
 import { useForm } from 'react-hook-form';
 import { expeditionService } from '../services/expedition.service';
@@ -14,39 +14,31 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import { GetServerSideProps } from 'next';
+import axios from 'axios';
+import Alert from '../helpers/Alert';
+import VoyageListComponent from './VoyageList';
 
 interface Values {
-  bus: Object,
+  bus: number | string,
   fee: number | string,
-  from: number | string,
-  to: number | string,
+  from: string | string,
+  to: string | string,
   date: Dayjs | null
 }
 
-const ExpeditionDef = () => {
+const ExpeditionDef = ({ busList }: any) => {
   const dispatch = useAppDispatch();
-  const { selectedBus, fee, fromProvince, toProvince, dateExp } = useAppSelector((state: any) => state.expedition)
-  const [busList, setBusList] = useState<{ id: number, plateNumber: String }[]>([
-    { id: 1, plateNumber: "34 DR 4000" },
-    { id: 2, plateNumber: "34 TA 4000" },
-    { id: 3, plateNumber: "35 ECE 4000" }
-  ])
-
-  const [provinceList, setProvinceList] = useState<{ id: number, name: String }[]>([
-    { id: 1, name: "İzmir" },
-    { id: 2, name: "Denizli" },
-    { id: 3, name: "İstanbul" },
-    { id: 4, name: "Ankara" },
-  ])
+  const { selectedBus, fee, fromProvince, toProvince, dateExp, locationList, expeditionInsertRes } = useAppSelector((state: any) => state.expedition)
 
   const validationSchema = Yup.object().shape({
     bus: Yup.number()
       .required("Otobüs seçiniz"),
     fee: Yup.number()
       .required("Koltuk ücreti giriniz"),
-    from: Yup.number()
+    from: Yup.string()
       .required("Başlangıç noktası seçiniz"),
-    to: Yup.number()
+    to: Yup.string()
       .required("Varış noktası seçiniz")
     // date: Yup.date().required("Tarih ve saat giriniz")
   });
@@ -89,12 +81,15 @@ const ExpeditionDef = () => {
 
     const [year, month, day] = bashData.split("-");
 
-    const result = [day, month, year].join('/');
+    const result = [day, month, year].join("-");
     console.log(result + hour);
 
+    console.log(data.from);
+    console.log(data.to);
+
+
     let dat = {
-      bus: { id: data.bus }, fee: data.fee, from: data.from, to: data.to, date: result
-      // + " " + hour
+      bus_id: data.bus, fee: data.fee, from: data.from, to: data.to, date: result
     };
     return expeditionService.insertExpedition(dat)
       .then((res: any) => {
@@ -106,9 +101,15 @@ const ExpeditionDef = () => {
   }
 
   useEffect(() => {
-    console.log(dateExp);
+    console.log(expeditionInsertRes);
 
-  }, [dateExp])
+    if (expeditionInsertRes.status === "success") {
+      Alert().Success("Sefer başarılı bir şekilde eklenmiştir.")
+
+    }
+    dispatch(setExpeditionInsertRes(""));
+
+  }, [expeditionInsertRes])
 
   return (
     <Formik
@@ -135,11 +136,14 @@ const ExpeditionDef = () => {
                         {...register("bus")}
                         onChange={(e) => { handleChange(e); handleChangeBus(e) }}
                       >
+                        {console.log(busList)}
                         {
-                          busList.length > 0 ? busList.map((bus: any) => {
+                          busList?.length > 0 ? busList.map((bus: any) => {
+                            console.log(bus);
+
                             return <MenuItem key={bus.id} value={bus.id}>
                               {/* TODO: bus.plate_number */}
-                              {bus.plateNumber}</MenuItem>
+                              {bus.plate_number}</MenuItem>
                           }) : ""
                         }
 
@@ -161,9 +165,11 @@ const ExpeditionDef = () => {
                         {...register("from")}
                         onChange={(e) => { handleChange(e); handleFromProvince(e) }}
                       >
+                        {console.log(locationList)
+                        }
                         {
-                          provinceList.length > 0 ? provinceList.map((province: any) => {
-                            return <MenuItem key={province.id} value={province.id}>{province.name}</MenuItem>
+                          locationList.length > 0 ? locationList.map((province: any) => {
+                            return <MenuItem key={province.id} value={province.name}>{province.name}</MenuItem>
                           }) : ""
                         }
 
@@ -184,8 +190,8 @@ const ExpeditionDef = () => {
                         onChange={(e) => { handleChange(e); handleToProvince(e) }}
                       >
                         {
-                          provinceList.length > 0 ? provinceList.map((province: any) => {
-                            return <MenuItem key={province.id} value={province.id}>{province.name}</MenuItem>
+                          locationList.length > 0 ? locationList.map((province: any) => {
+                            return <MenuItem key={province.id} value={province.name}>{province.name}</MenuItem>
                           }) : ""
                         }
 
@@ -216,6 +222,9 @@ const ExpeditionDef = () => {
                   </button>
                 </Form>
               </div>
+            </div>
+            <div className='col-12 col-md-7'>
+              <VoyageListComponent />
             </div>
           </div>
         )

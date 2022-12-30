@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
 
-const url = "http://localhost:82/api"
+const url = "http://localhost:83/api"
 
 interface Values {
   plate_number: string,
@@ -16,9 +16,9 @@ interface Values {
 
 interface ValuesNewData {
   plate_number: string,
-  model_id: number,
-  number_of_seats: number,
-  type: number,
+  bus_model_id: number,
+  seats: number,
+  type_id: number,
   properties: { id: number }[]
 }
 
@@ -28,20 +28,20 @@ export const busService = {
 };
 
 function insertBus(data: Values) {
-  let newData: ValuesNewData = { plate_number: data.plate_number, model_id: Number(data.model_id), number_of_seats: Number(data.number_of_seats), type: Number(data.type), properties: [] };
+  let newData: ValuesNewData = { plate_number: data.plate_number, bus_model_id: Number(data.model_id), seats: Number(data.number_of_seats), type_id: Number(data.type), properties: [] };
   for (let i = 0; i < data.properties.length; i++) {
     newData.properties.push({ id: data.properties[i] })
   }
   console.log(newData)
   let token = Cookies.get("user-token");
-  return fetchWrapper.post(`${url}/bus`, token, newData).then((res: any) => {
+  return fetchWrapper.post(`${url}/busses`, token, newData).then((res: any) => {
     console.log(res);
     return res;
   });
 }
 
 function updateBus(data: Values) {
-  let newData: ValuesNewData = { plate_number: data.plate_number, model_id: Number(data.model_id), number_of_seats: Number(data.number_of_seats), type: Number(data.type), properties: [] };
+  let newData: ValuesNewData = { plate_number: data.plate_number, bus_model_id: Number(data.model_id), seats: Number(data.number_of_seats), type_id: Number(data.type), properties: [] };
   for (let i = 0; i < data.properties.length; i++) {
     newData.properties.push({ id: data.properties[i] })
   }

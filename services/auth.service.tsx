@@ -4,13 +4,13 @@ import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
 
-const url = "http://localhost:82/api"
+const url = "http://localhost:83/api"
 
 const userSubject = new BehaviorSubject(process.browser && typeof window !== "undefined" && localStorage.getItem('user-data') !== null && localStorage.getItem('user-data') !== undefined && localStorage.getItem('user-data'))
 
 interface Values {
-    username: string,
-    //TODO: email: string,
+    //TODO: username: string,
+    email: string,
     password: string
 }
 
@@ -25,13 +25,14 @@ const setCookie = (res: any) => {
     let d = new Date();
     d.setTime(d.getTime() + (60 * 60 * 1000));
     console.log(d);
-    Cookies.set("user-token", res?.data?.data, { expires: d, path: "*" })
+    Cookies.set("user-token", res?.data?.data?.token, { expires: d, path: "*" })
 
 }
 
 function login(data: Values) {
     //TODO: yeni backend için (/auth) eklenmeli
-    return fetchWrapper.post(`${url}/login`, undefined, data).then((res: any) => {
+    return fetchWrapper.post(`${url}/auth/login`, undefined, data).then((res: any) => {
+        console.log(res)
         userSubject.next(res.data);
         localStorage.setItem('user-data', JSON.stringify(res.data));
         setCookie(res);

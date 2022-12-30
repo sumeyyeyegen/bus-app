@@ -41,8 +41,9 @@ export const fetchModelById = createAsyncThunk(
   'bus/fetchById',
   async (brandId: any, thunkAPI) => {
     let token: any = Cookies.get("user-token");
-    const response = await fetchWrapper.get(`http://localhost:82/api/model/${brandId}`, token);
-    return response.data.model
+    const response = await fetchWrapper.get(`http://localhost:83/api/models/?brandId=${brandId}`, token);
+    console.log("res", response)
+    return response.data.data
   }
 )
 

@@ -22,12 +22,12 @@ interface Values {
 const InsertForm = () => {
 
   const [selectedPropertiesList, setSelectedPropertiesList] = React.useState<number[]>([]);
-  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, selectedProp, busInsertRes, edit,plateNumber } = useAppSelector((state: any) => state.bus)
+  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, selectedProp, busInsertRes, edit, plateNumber } = useAppSelector((state: any) => state.bus)
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handlePlateNumber = (event:SelectChangeEvent) =>{
+  const handlePlateNumber = (event: SelectChangeEvent) => {
     event && event.target.value &&
       dispatch(setPlateNumber(event?.target?.value));
   }
@@ -85,7 +85,8 @@ const InsertForm = () => {
         dispatch(setBusInsertRes(res.data));
       })
       .catch((error: any) => {
-        setError('apiError', { message: error.message });
+        console.log(error)
+        error.response.data.message === "ERROR: duplicate key value violates unique constraint \"idx_buses_plate_number\" (SQLSTATE 23505)" && Alert().Error("Bu plakaya ait bir araç bulunmaktadır")
       });
   }
 
@@ -99,9 +100,11 @@ const InsertForm = () => {
 
   useEffect(() => {
     console.log(busInsertRes)
-    if (busInsertRes.message === "Bus created") {
+    if (busInsertRes.message === "Bus successfully created") {
       dispatch(setEdit(true));
       Alert().Success("Ekleme işlemi başarılı");
+
+    } else if (busInsertRes.message === "") {
 
     }
     dispatch(setBusInsertRes(""))
@@ -122,7 +125,7 @@ const InsertForm = () => {
               <div>
                 <Form>
                   <div className="form-group">
-                    <FormItem errors={errors.plate_number} isValid={isValid} touched={touched.plate_number} formik={formik.errors.plate_number} type="plate_number" values={values.plate_number} handleChange={(e:any) =>{handleChange(e); handlePlateNumber(e)}} text="Plaka" />
+                    <FormItem errors={errors.plate_number} isValid={isValid} touched={touched.plate_number} formik={formik.errors.plate_number} type="plate_number" values={values.plate_number} handleChange={(e: any) => { handleChange(e); handlePlateNumber(e) }} text="Plaka" />
                   </div>
                   <div className="form-group">
                     <FormControl fullWidth>
@@ -134,7 +137,7 @@ const InsertForm = () => {
                         value={selectedBrand}
                         label="Marka"
                         {...register("brand")}
-                        onChange={(e) =>{ handleChangeBrand(e)}}
+                        onChange={(e) => { handleChangeBrand(e) }}
                       >
                         {
                           brandList.length > 0 ? brandList.map((brand: any) => {
@@ -160,7 +163,7 @@ const InsertForm = () => {
                       >
                         {
                           modelList.length > 0 ? modelList.map((model: any) => {
-                            return <MenuItem key={model.id} value={model.id}>{model.name}</MenuItem>
+                            return <MenuItem key={model.id} value={model.id}>{model.value}</MenuItem>
                           }) : ""
                         }
 
@@ -172,7 +175,7 @@ const InsertForm = () => {
                   </div>
                   <div className="form-group">
                     <FormControl fullWidth>
-
+                      <InputLabel id="demo-simple-select-label">Tip</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -182,9 +185,11 @@ const InsertForm = () => {
                         {...register("type")}
                         onChange={(e) => { handleChange(e); handleChangeType(e) }}
                       >
+                        {console.log(typeList)
+                        }
                         {
                           typeList.length > 0 ? typeList.map((type: any) => {
-                            return <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
+                            return <MenuItem key={type.id} value={type.id}>{type.value}</MenuItem>
                           }) : ""
                         }
 
@@ -206,7 +211,7 @@ const InsertForm = () => {
                       >
                         {
                           propList.length > 0 ? propList.map((prop: any) => {
-                            return <MenuItem key={prop.id} value={prop.id}>{prop.name}</MenuItem>
+                            return <MenuItem key={prop.id} value={prop.id}>{prop.value}</MenuItem>
                           }) : ""
                         }
 

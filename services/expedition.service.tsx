@@ -5,26 +5,35 @@ import Cookies from "js-cookie";
 import { fetchWrapper } from '../helpers';
 import { Dayjs } from 'dayjs';
 
-const url = "http://localhost:82/api"
+const url = "http://localhost:83/api"
 
 interface Values {
-  bus: Object,
+  bus_id: number | string,
   fee: number | string,
-  from: number | string,
-  to: number | string,
+  from: string | string,
+  to: string | string,
   date: string | null
 }
 
 export const expeditionService = {
   insertExpedition,
-  deleteExpedition
+  deleteExpedition,
+  getVoyageByParams
 };
 
 function insertExpedition(data: Values) {
-  let newData: Values = { bus: data.bus, fee: Number(data.fee), from: Number(data.from), to: Number(data.to), date: data.date };
+  let newData: Values = { bus_id: data.bus_id, fee: Number(data.fee), from: data.from, to: data.to, date: data.date };
 
   let token = Cookies.get("user-token");
   return fetchWrapper.post(`${url}/voyage`, token, newData).then((res: any) => {
+    console.log(res);
+    return res;
+  });
+}
+
+function getVoyageByParams(from: string, to: string, day: string, time: string) {
+  let token = Cookies.get("user-token");
+  return fetchWrapper.get(`${url}/voyage/${from}-${to}/day:${day}-time:${time}`, token).then((res: any) => {
     console.log(res);
     return res;
   });
