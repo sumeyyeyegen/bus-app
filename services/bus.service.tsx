@@ -32,10 +32,8 @@ function insertBus(data: Values) {
   for (let i = 0; i < data.properties.length; i++) {
     newData.properties.push({ id: data.properties[i] })
   }
-  console.log(newData)
   let token = Cookies.get("user-token");
   return fetchWrapper.post(`${url}/busses`, token, newData).then((res: any) => {
-    console.log(res);
     return res;
   });
 }
@@ -47,7 +45,6 @@ function updateBus(data: Values) {
   }
   let token = Cookies.get("user-token");
   return fetchWrapper.put(`${url}/bus-definition`, token, newData).then((res: any) => {
-    console.log(res);
     return res;
   });
 }

@@ -16,7 +16,8 @@ interface BusState {
   seatNumber: any,
   busUpdateRes: any,
   plateList: Array<any>,
-  plateNumber: any
+  plateNumber: any,
+  seats: Array<any>
 }
 
 // Define the initial state using that type
@@ -34,7 +35,8 @@ const initialState: BusState = {
   seatNumber: "",
   busUpdateRes: "",
   plateList: [],
-  plateNumber: ""
+  plateNumber: "",
+  seats: []
 }
 
 export const fetchModelById = createAsyncThunk(
@@ -42,7 +44,6 @@ export const fetchModelById = createAsyncThunk(
   async (brandId: any, thunkAPI) => {
     let token: any = Cookies.get("user-token");
     const response = await fetchWrapper.get(`http://localhost:83/api/models/?brandId=${brandId}`, token);
-    console.log("res", response)
     return response.data.data
   }
 )
@@ -92,22 +93,23 @@ export const busReducer = createSlice({
     },
     setPlateNumber: (state, payload) => {
       state.plateNumber = payload.payload;
+    },
+    setSeats: (state, payload) => {
+      state.seats = payload.payload;
     }
   },
 
   extraReducers: (builder) => {
 
     builder.addCase(fetchModelById.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.modelList = action?.payload
     }),
       builder.addCase(fetchModelById.rejected, (state, action) => {
-        console.log(action.payload)
         // state.modelListErr = action.payload 
       })
   }
 })
 
-export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setPlateList, setPlateNumber } = busReducer.actions
+export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setPlateList, setPlateNumber, setSeats } = busReducer.actions
 
 export default busReducer.reducer

@@ -18,6 +18,7 @@ import { GetServerSideProps } from 'next';
 import axios from 'axios';
 import Alert from '../helpers/Alert';
 import VoyageListComponent from './VoyageList';
+import VoyageDefList from './VoyageDefList';
 
 interface Values {
   bus: number | string,
@@ -29,7 +30,7 @@ interface Values {
 
 const ExpeditionDef = ({ busList }: any) => {
   const dispatch = useAppDispatch();
-  const { selectedBus, fee, fromProvince, toProvince, dateExp, locationList, expeditionInsertRes } = useAppSelector((state: any) => state.expedition)
+  const { selectedBus, fee, fromProvince, toProvince, dateExp, locationList, voyageList, expeditionInsertRes } = useAppSelector((state: any) => state.expedition)
 
   const validationSchema = Yup.object().shape({
     bus: Yup.number()
@@ -68,28 +69,22 @@ const ExpeditionDef = ({ busList }: any) => {
 
   const { register, handleSubmit, reset, setError, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
-  console.log(isSubmitting);
+  
 
   function onSubmit(data: Values) {
-    console.log("data", data)
+    
     let newDate = JSON.stringify(dateExp.$d).split("");
-    console.log(newDate);
+    
     let bashData = newDate.splice(1, 10).join().replaceAll(",", "");
     let hour = newDate.splice(2, 8).join().replaceAll(",", "");
-    console.log(bashData);
-    console.log(hour)
+
 
     const [year, month, day] = bashData.split("-");
 
-    const result = [day, month, year].join("-");
-    console.log(result + hour);
-
-    console.log(data.from);
-    console.log(data.to);
-
+    const result = [day, month, year].join("-")
 
     let dat = {
-      bus_id: data.bus, fee: data.fee, from: data.from, to: data.to, date: result
+      bus_id: data.bus, fee: data.fee, from: data.from, to: data.to, date: result + " " + hour
     };
     return expeditionService.insertExpedition(dat)
       .then((res: any) => {
@@ -101,7 +96,6 @@ const ExpeditionDef = ({ busList }: any) => {
   }
 
   useEffect(() => {
-    console.log(expeditionInsertRes);
 
     if (expeditionInsertRes.status === "success") {
       Alert().Success("Sefer başarılı bir şekilde eklenmiştir.")
@@ -114,7 +108,7 @@ const ExpeditionDef = ({ busList }: any) => {
   return (
     <Formik
       initialValues={{ bus: "", fee: '', from: "", to: "", date: null }}
-      onSubmit={(values: Values) => { console.log(values); onSubmit(values) }}
+      onSubmit={(values: Values) =>  onSubmit(values) }
       validationSchema={validationSchema}
     >
       {formik => {
@@ -136,11 +130,8 @@ const ExpeditionDef = ({ busList }: any) => {
                         {...register("bus")}
                         onChange={(e) => { handleChange(e); handleChangeBus(e) }}
                       >
-                        {console.log(busList)}
                         {
                           busList?.length > 0 ? busList.map((bus: any) => {
-                            console.log(bus);
-
                             return <MenuItem key={bus.id} value={bus.id}>
                               {/* TODO: bus.plate_number */}
                               {bus.plate_number}</MenuItem>
@@ -165,8 +156,6 @@ const ExpeditionDef = ({ busList }: any) => {
                         {...register("from")}
                         onChange={(e) => { handleChange(e); handleFromProvince(e) }}
                       >
-                        {console.log(locationList)
-                        }
                         {
                           locationList.length > 0 ? locationList.map((province: any) => {
                             return <MenuItem key={province.id} value={province.name}>{province.name}</MenuItem>
@@ -224,7 +213,7 @@ const ExpeditionDef = ({ busList }: any) => {
               </div>
             </div>
             <div className='col-12 col-md-7'>
-              <VoyageListComponent />
+              <VoyageDefList />
             </div>
           </div>
         )

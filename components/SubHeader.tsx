@@ -13,7 +13,6 @@ const SubHeader = ({ handleTab, activeTab }: PropTypes) => {
   //   router.push('/');
   // }
 
-  console.log(router.asPath)
   return (
     <header id="header">
       <div className="header-row-2">

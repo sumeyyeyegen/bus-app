@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
 import { Form, Formik } from 'formik';
 import { FormItem } from './FormItem';
-import { setSelectedBrand, fetchModelById, setSelectedModel, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes } from '../redux/reducers/BusReducer';
+import { setSelectedBrand, fetchModelById, setSelectedModel, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setSeats } from '../redux/reducers/BusReducer';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { busService } from '../services/bus.service';
@@ -23,7 +23,7 @@ interface Values {
 const UpdateForm = () => {
 
   const [selectedPropertiesList, setSelectedPropertiesList] = React.useState<number[]>([]);
-  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, seatNumber, busUpdateRes, plateNumber } = useAppSelector((state: any) => state.bus)
+  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, seatNumber, busUpdateRes, plateNumber, seats } = useAppSelector((state: any) => state.bus)
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -92,7 +92,6 @@ const UpdateForm = () => {
   }, [selectedBrand])
 
   useEffect(() => {
-    console.log(busUpdateRes)
     if (busUpdateRes.message === "Bus created") {
       dispatch(setEdit(true));
       Alert().Success("Güncelleme başarılı")
@@ -100,6 +99,15 @@ const UpdateForm = () => {
     dispatch(setBusUpdateRes(""))
   }, [busUpdateRes])
 
+
+  function increment() {
+    dispatch(setSeats([...seats, { id: seats.length, value: seats.length + 1, height: 3, width: 3, free: 0}]));
+
+  }
+  function decrement() {
+    let filteredData = seats.filter((item: any) => item.id !== seats.length - 1);
+    dispatch(setSeats([...filteredData]));
+  }
 
   return (
     <Formik
@@ -109,7 +117,6 @@ const UpdateForm = () => {
     >
       {formik => {
         const { touched, isValid, values, handleChange, handleSubmit } = formik
-        // console.log(values)
         return (
           <div className="row">
             <div className="col-12 col-md-5">
@@ -217,13 +224,15 @@ const UpdateForm = () => {
                       className="btn btn-primary">
                       {formState.isSubmitting &&
                         <span className="spinner-border spinner-border-sm mr-1"></span>}
-                      Kaydet
+                      Düzenle
                     </button>
                   }
                 </Form>
               </div>
             </div>
-            <div className="col-12 col-md-7 d-flex justify-content-center">
+            <div className="col-12 col-md-7">
+              <button onClick={() => increment()}>+</button>
+              <button onClick={() => decrement()}>-</button>
               <Graph seatNumber={seatNumber} />
             </div>
           </div>

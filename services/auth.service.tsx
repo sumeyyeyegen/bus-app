@@ -3,6 +3,7 @@ import Router from 'next/router'
 import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
+import Alert from '../helpers/Alert';
 
 const url = "http://localhost:83/api"
 
@@ -18,13 +19,13 @@ export const authService = {
     user: userSubject.asObservable(),
     get userValue() { return userSubject },
     login,
-    logout
+    logout,
+    register
 };
 
 const setCookie = (res: any) => {
     let d = new Date();
     d.setTime(d.getTime() + (60 * 60 * 1000));
-    console.log(d);
     Cookies.set("user-token", res?.data?.data?.token, { expires: d, path: "*" })
 
 }
@@ -32,13 +33,22 @@ const setCookie = (res: any) => {
 function login(data: Values) {
     //TODO: yeni backend için (/auth) eklenmeli
     return fetchWrapper.post(`${url}/auth/login`, undefined, data).then((res: any) => {
-        console.log(res)
         userSubject.next(res.data);
         localStorage.setItem('user-data', JSON.stringify(res.data));
         setCookie(res);
         // Cookies.set("user-token", res?.data?.data)
         Router.push("/");
 
+        return res;
+    });
+}
+
+function register(data: Values) {
+    return fetchWrapper.post(`${url}/auth/register`, undefined, data).then((res: any) => {
+        // userSubject.next(res.data);
+        // localStorage.setItem('user-data', JSON.stringify(res.data));
+        // setCookie(res);
+        // Cookies.set("user-token", res?.data?.data)
         return res;
     });
 }

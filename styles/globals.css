@@ -67,7 +67,6 @@ a {
 
 .card {
   border-color: #b3b3b2;
-  ;
 }
 
 #header .categories .menu li:hover {
@@ -131,16 +130,60 @@ a:hover {
   color: #fff;
 }
 
+small a {
+  text-decoration: none;
+  color: rgb(0, 94, 255);
+
+}
+
+small a:hover {
+  text-decoration: none;
+  color: rgb(0, 94, 255);
+}
+
 .content {
   display: flex;
   align-items: center;
 }
 
 .content::after {
-  background-color: #e1e1e1;
-  content: "";
-  height: 1px;
-  width: 100%;
-  left: 1em;
+  background-color: #e1e1e1 !important;
+  content: "" !important;
+  height: 1px !important;
+  width: 100% !important;
+  left: 1em !important;
+  position: relative !important;
+}
+
+/* ----------------SEAT------------------------- */
+
+
+/* .selectedType2.koltuk0 {
+  border: 1px solid black;
+  display: inline;
+  padding: 1.5em 1.5em 1.5em 1.5em;
+
+} */
+
+/* .koltuk {
+  border: 1px solid black;
+  margin-bottom: 5px;
+  height: 57px;
+  text-align: center;
+  line-height: 57px;
+  font-size: 18px;
+  font-weight: 600;
+} */
+
+.otobus-div {
+  width: 250px;
+  height: 639px;
+  overflow: auto;
+  margin: 25px 0px;
+  display: table-cell;
   position: relative;
+}
+
+.koltuk-sira {
+  padding: 0;
 }

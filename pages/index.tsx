@@ -64,8 +64,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     method: 'GET',
     url: "http://localhost:83/api/locations",
     headers: {
-      'Content-Type': 'application/json',
-      "Authorization": authorization
+      'Content-Type': 'application/json'
     }
   };
 

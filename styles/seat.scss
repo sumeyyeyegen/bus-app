@@ -1,0 +1,73 @@
+
+
+@for $item from 1 through 50 {
+  .selectedType2.koltuk#{$item}{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    position: absolute; 
+    left: calc(47px * 0); 
+    top: calc(47* #{$item}px);
+    // padding: 1em 0.5em 1em 0;
+    text-align: center;
+    background: url("../images/koltuk.png");
+    
+  }
+  
+}
+
+@for $item from 1 through 50 {
+  .selectedType1.koltuk#{$item}{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    position: absolute; 
+    left: calc(47px * 0); 
+    top: calc(47* #{$item}px);
+    // padding: 1em 0.5em 1em 0;
+    text-align: center;
+    background: url("../images/koltuk.png");
+    
+  }
+  
+}
+
+@for $item from 1 through 50 {
+  .selectedType2.koltuk#{$item}.selected{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    position: absolute; 
+    left: calc(47px * 0); 
+    top: calc(47* #{$item}px);
+    // padding: 1em 0.5em 1em 0;
+    text-align: center;
+    background: url("../images/koltuk-secili.png");
+    
+  }
+  
+}
+
+@for $item from 1 through 50 {
+  .selectedType1.koltuk#{$item}.selected{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    position: absolute; 
+    left: calc(47px * 0); 
+    top: calc(47* #{$item}px);
+    // padding: 1em 0.5em 1em 0;
+    text-align: center;
+    background: url("../images/koltuk-secili.png");
+    
+  }
+  
+}

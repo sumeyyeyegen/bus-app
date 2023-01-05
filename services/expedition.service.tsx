@@ -26,7 +26,6 @@ function insertExpedition(data: Values) {
 
   let token = Cookies.get("user-token");
   return fetchWrapper.post(`${url}/voyage`, token, newData).then((res: any) => {
-    console.log(res);
     return res;
   });
 }
@@ -34,12 +33,14 @@ function insertExpedition(data: Values) {
 function getVoyageByParams(from: string, to: string, day: string, time: string) {
   let token = Cookies.get("user-token");
   return fetchWrapper.get(`${url}/voyage/${from}-${to}/day:${day}-time:${time}`, token).then((res: any) => {
-    console.log(res);
     return res;
   });
 }
 
-function deleteExpedition() {
-
+function deleteExpedition(id: any) {
+  let token = Cookies.get("user-token");
+  return fetchWrapper.delete(`${url}/voyage/${id}`, token, { id: id }).then((res: any) => {
+    return res;
+  });
 }
 

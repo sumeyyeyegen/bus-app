@@ -10,6 +10,7 @@ import { busService } from '../services/bus.service';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useRouter } from 'next/router';
 import Alert from '../helpers/Alert';
+import Graph from './SeatArrangement/Graph/graph';
 
 interface Values {
   plate_number: string,
@@ -64,7 +65,7 @@ const InsertForm = () => {
       .required("Plaka zorunludur").matches(regex, "Uygun bir plaka giriniz"),
     model_id: Yup.number()
       .required("Model seçiniz"),
-    number_of_seats: Yup.number()
+    number_of_seats: Yup.number().max(50, "En fazla 50 koltuk girilebilir")
       .required("Koltuk sayısı giriniz"),
     type: Yup.number()
       .required("Zorunlu alan"),
@@ -78,14 +79,12 @@ const InsertForm = () => {
   const { errors } = formState;
 
   function onSubmit(data: Values) {
-    console.log("data", data)
     let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: data.number_of_seats, type: data.type, properties: data.properties };
     return busService.insertBus(dat)
       .then((res: any) => {
         dispatch(setBusInsertRes(res.data));
       })
       .catch((error: any) => {
-        console.log(error)
         error.response.data.message === "ERROR: duplicate key value violates unique constraint \"idx_buses_plate_number\" (SQLSTATE 23505)" && Alert().Error("Bu plakaya ait bir araç bulunmaktadır")
       });
   }
@@ -99,7 +98,6 @@ const InsertForm = () => {
 
 
   useEffect(() => {
-    console.log(busInsertRes)
     if (busInsertRes.message === "Bus successfully created") {
       dispatch(setEdit(true));
       Alert().Success("Ekleme işlemi başarılı");
@@ -121,7 +119,7 @@ const InsertForm = () => {
         const { touched, isValid, values, handleChange, handleSubmit } = formik
         return (
           <div className="row">
-            <div className="col-12 col-md-5">
+            <div className="col-12 col-md-6">
               <div>
                 <Form>
                   <div className="form-group">
@@ -185,8 +183,6 @@ const InsertForm = () => {
                         {...register("type")}
                         onChange={(e) => { handleChange(e); handleChangeType(e) }}
                       >
-                        {console.log(typeList)
-                        }
                         {
                           typeList.length > 0 ? typeList.map((type: any) => {
                             return <MenuItem key={type.id} value={type.id}>{type.value}</MenuItem>
@@ -233,6 +229,9 @@ const InsertForm = () => {
                   }
                 </Form>
               </div>
+            </div>
+            <div className="col-12 col-md-6 d-flex justify-content-center">
+              <Graph seatNumber="26" />
             </div>
           </div>
         )

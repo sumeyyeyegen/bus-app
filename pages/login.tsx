@@ -9,6 +9,8 @@ import { authService } from '../services';
 import { Field, Formik, Form } from 'formik';
 import { FormItem } from '../components';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
+import Alert from '../helpers/Alert';
 
 export default Login;
 
@@ -25,8 +27,6 @@ function Login() {
     // redirect to home if already logged in
     let token = Cookies.get("user-token");
     let control = authService.userValue.getValue();
-    console.log(control);
-    console.log(token)
 
     if (control !== false && control !== null && token !== undefined && token !== null) {
       router.push('/');
@@ -53,6 +53,8 @@ function Login() {
         router.push(returnUrl);
       })
       .catch((error: any) => {
+        error.response.data.message === "Bu mail adresi ile kayıtlı bir kullanıcı bulunamadı" ? (Alert().Error("Bu mail adresi ile kayıtlı bir kullanıcı bulunamadı"), router.push("/register")) : ""
+
         setError('apiError', { message: error.message });
       });
   }
@@ -89,6 +91,8 @@ function Login() {
                       <span className="spinner-border spinner-border-sm mr-1"></span>}
                     Giriş Yap
                   </button>
+
+                  <small className='d-block text-muted mt-3'>Kayıtlı hesabınız yoksa <Link href="/register">Kayıt ol</Link></small>
                 </Form>
               </div>
             </div>
@@ -116,8 +120,6 @@ function Login() {
 //     // redirect to home if already logged in
 //     let token = Cookies.get("user-token");
 //     let control = authService.userValue.getValue();
-//     console.log(control);
-//     console.log(token)
 
 //     if (control !== false && control !== null && token !== undefined && token !== null) {
 //       router.push('/');
