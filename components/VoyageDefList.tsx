@@ -11,7 +11,7 @@ import VoyageList from './VoyageList';
 const VoyageDefList = () => {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs(new Date()));
   const [dateExpList, setDateExpList] = useState()
-  const { voyageList } = useAppSelector((state: any) => state.expedition)
+  const { voyageList } = useAppSelector((state: any) => state.voyage)
   const [modalInfo, setModalInfo] = useState("")
   const { isShowing, toggle } = useModal();
 

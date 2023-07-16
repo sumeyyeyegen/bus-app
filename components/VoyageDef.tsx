@@ -4,9 +4,9 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { Formik, Form } from 'formik';
 import { useForm } from 'react-hook-form';
-import { expeditionService } from '../services/expedition.service';
+import { voyageService } from '../services';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { setDateExp, setExpeditionInsertRes, setFee, setFromProvince, setSelectedBus, setToProvince } from '../redux/reducers/ExpeditionReducer';
+import { setDateExp, setVoyageInsertRes, setFee, setFromProvince, setSelectedBus, setToProvince } from '../redux/reducers/VoyageReducer';
 import { FormItem } from './FormItem';
 
 import dayjs, { Dayjs } from 'dayjs';
@@ -28,9 +28,9 @@ interface Values {
   date: Dayjs | null
 }
 
-const ExpeditionDef = ({ busList }: any) => {
+const VoyageDef = ({ busList }: any) => {
   const dispatch = useAppDispatch();
-  const { selectedBus, fee, fromProvince, toProvince, dateExp, locationList, voyageList, expeditionInsertRes } = useAppSelector((state: any) => state.expedition)
+  const { selectedBus, fee, fromProvince, toProvince, dateExp, locationList, voyageList, voyageInsertRes } = useAppSelector((state: any) => state.voyage)
 
   const validationSchema = Yup.object().shape({
     bus: Yup.number()
@@ -69,12 +69,12 @@ const ExpeditionDef = ({ busList }: any) => {
 
   const { register, handleSubmit, reset, setError, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
-  
+
 
   function onSubmit(data: Values) {
-    
+
     let newDate = JSON.stringify(dateExp.$d).split("");
-    
+
     let bashData = newDate.splice(1, 10).join().replaceAll(",", "");
     let hour = newDate.splice(2, 8).join().replaceAll(",", "");
 
@@ -86,9 +86,9 @@ const ExpeditionDef = ({ busList }: any) => {
     let dat = {
       bus_id: data.bus, fee: data.fee, from: data.from, to: data.to, date: result + " " + hour
     };
-    return expeditionService.insertExpedition(dat)
+    return voyageService.insertVoyage(dat)
       .then((res: any) => {
-        dispatch(setExpeditionInsertRes(res.data));
+        dispatch(setVoyageInsertRes(res.data));
       })
       .catch((error: any) => {
         setError('apiError', { message: error.message });
@@ -97,18 +97,18 @@ const ExpeditionDef = ({ busList }: any) => {
 
   useEffect(() => {
 
-    if (expeditionInsertRes.status === "success") {
+    if (voyageInsertRes.status === "success") {
       Alert().Success("Sefer başarılı bir şekilde eklenmiştir.")
 
     }
-    dispatch(setExpeditionInsertRes(""));
+    dispatch(setVoyageInsertRes(""));
 
-  }, [expeditionInsertRes])
+  }, [voyageInsertRes])
 
   return (
     <Formik
       initialValues={{ bus: "", fee: '', from: "", to: "", date: null }}
-      onSubmit={(values: Values) =>  onSubmit(values) }
+      onSubmit={(values: Values) => onSubmit(values)}
       validationSchema={validationSchema}
     >
       {formik => {
@@ -223,4 +223,4 @@ const ExpeditionDef = ({ busList }: any) => {
   )
 }
 
-export default ExpeditionDef
+export default VoyageDef

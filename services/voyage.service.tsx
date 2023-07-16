@@ -15,13 +15,13 @@ interface Values {
   date: string | null
 }
 
-export const expeditionService = {
-  insertExpedition,
-  deleteExpedition,
+export const voyageService = {
+  insertVoyage,
+  deleteVoyage,
   getVoyageByParams
 };
 
-function insertExpedition(data: Values) {
+function insertVoyage(data: Values) {
   let newData: Values = { bus_id: data.bus_id, fee: Number(data.fee), from: data.from, to: data.to, date: data.date };
 
   let token = Cookies.get("user-token");
@@ -37,7 +37,7 @@ function getVoyageByParams(from: string, to: string, day: string, time: string) 
   });
 }
 
-function deleteExpedition(id: any) {
+function deleteVoyage(id: any) {
   let token = Cookies.get("user-token");
   return fetchWrapper.delete(`${url}/voyage/${id}`, token, { id: id }).then((res: any) => {
     return res;

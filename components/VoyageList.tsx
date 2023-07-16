@@ -7,9 +7,6 @@ interface Values {
   handleClick: Function | undefined
 }
 const VoyageList = ({ voyageList, handleClick }: Values) => {
-
-
-
   return (<>
     <div className="card p-3 mt-3 mt-md-0">
       <div className="d-flex justify-content-between flex-wrap border-0">
@@ -18,17 +15,11 @@ const VoyageList = ({ voyageList, handleClick }: Values) => {
           <span className="text-muted"><small>Sisteme kayıtlı {voyageList?.length} sefer bulundu</small></span>
         </div>
       </div>
-      {/* <ul className='w-100 p-0' style={{ listStyle: "none" }}>
-        {
-          voyageList.length > 0 ? voyageList.map((item: any) => {
-            return <li className='text-capitalize p-2 row' key={item.id}><div className='content col-7'>{item.from}</div> <div className='d-inline col-5'>{item.to}</div></li>
-          }) : ""
-        }
-      </ul> */}
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#DAF7A6', minWidth: "100%" }}>
         {voyageList.length > 0 ? voyageList.map((item: any) => (
+          console.log(item),
           item?.buses?.map((bus: any, idx: any) => {
-            return <VoyageListItem seatCount={bus?.seats[0]?.count} id={bus.id} handleClick={handleClick} from={item.from} to={item.to} day={item.day} fee={item.fee} type={bus.type} key={idx} />
+            return <VoyageListItem seatCount={bus?.seats[0]?.count} voyageId={item.id} id={bus.id} handleClick={handleClick} from={item.from} to={item.to} day={item.day} fee={item.fee} type={bus.type} key={idx} seats={bus.seats} />
           })
         )) : "Sefer Bulunamadı"}
       </List>

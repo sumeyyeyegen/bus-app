@@ -1,3 +1,9 @@
+/*----------------------- Global----------------------------------------- */
+:root {
+  --primary-color: rgb(43, 89, 176);
+  --thema-color: #FD0F00;
+}
+
 html,
 body {
   padding: 0;
@@ -25,6 +31,24 @@ a {
     background: black;
   }
 }
+
+a:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+small a {
+  text-decoration: none;
+  color: var(--primary-color);
+
+}
+
+small a:hover {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+/*------------------------ Header------------------------------------ */
 
 #header .categories .menu {
   margin: 0;
@@ -65,20 +89,10 @@ a {
   /* background: #f6f7f8; */
 }
 
-.card {
-  border-color: #b3b3b2;
-}
-
 #header .categories .menu li:hover {
-  background-color: #FD0F00;
+  background-color: var(--thema-color);
   color: #fff;
-  border: #FD0F00;
-}
-
-
-.container {
-  margin: 0 auto;
-  max-width: 73em;
+  border: var(--thema-color);
 }
 
 #header div.header-row-2 {
@@ -86,7 +100,7 @@ a {
 }
 
 #header div.header-row-1 {
-  background-color: #FD0F00;
+  background-color: var(--thema-color);
   height: 5em;
   padding-left: 5em;
   padding-right: 5em;
@@ -113,35 +127,22 @@ a {
   flex: 1;
 }
 
+
+/* -----------------------------SubHeader--------------------------- */
+
 .sub-header-item.active {
-  background-color: #FD0F00;
+  background-color: var(--thema-color);
   color: #fff !important;
-  border: #FD0F00 !important;
+  border: var(--thema-color) !important;
 }
 
 .sub-header-item:hover {
-  background-color: #FD0F00;
+  background-color: var(--thema-color);
   color: #fff !important;
-  border: #FD0F00 !important;
+  border: var(--thema-color) !important;
 }
 
-a:hover {
-  text-decoration: none;
-  color: #fff;
-}
-
-small a {
-  text-decoration: none;
-  color: rgb(0, 94, 255);
-
-}
-
-small a:hover {
-  text-decoration: none;
-  color: rgb(0, 94, 255);
-}
-
-.content {
+/* .content {
   display: flex;
   align-items: center;
 }
@@ -153,37 +154,183 @@ small a:hover {
   width: 100% !important;
   left: 1em !important;
   position: relative !important;
+} */
+
+/*-------------------------Bus Def------------------------------- */
+.increment-button {
+  /* background-color: #b3b3b2; */
+  width: 40px;
+  height: 40px;
+}
+
+.decrement-button {
+  /* background-color: #b3b3b2; */
+  width: 40px;
+  height: 40px;
+}
+
+/*------------------------ BuyTicket----------------------------- */
+
+.buy-ticket-button {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.buy-ticket-button:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.gender button.woman,
+button.man {
+  border: 1px solid var(--thema-color);
+  color: var(--thema-color);
+  margin-right: 10px;
+}
+
+.gender button.woman.active,
+button.man.active {
+  background-color: var(--thema-color);
+  color: #fff;
+}
+
+.gender button.woman:hover,
+button.man:hover {
+  background-color: var(--thema-color);
+  color: #fff;
 }
 
 /* ----------------SEAT------------------------- */
 
-
-/* .selectedType2.koltuk0 {
-  border: 1px solid black;
-  display: inline;
-  padding: 1.5em 1.5em 1.5em 1.5em;
-
-} */
-
-/* .koltuk {
-  border: 1px solid black;
-  margin-bottom: 5px;
-  height: 57px;
-  text-align: center;
-  line-height: 57px;
-  font-size: 18px;
-  font-weight: 600;
-} */
-
-.otobus-div {
+.bus {
   width: 250px;
   height: 639px;
   overflow: auto;
-  margin: 25px 0px;
   display: table-cell;
   position: relative;
 }
 
-.koltuk-sira {
-  padding: 0;
+.fromProvince::after {
+  color: var(--thema-color);
+  content: "";
+  height: 1px;
+  left: 15;
+  margin-top: -1px;
+  position: absolute;
+  display: block;
+  top: 50%;
+  width: 50%;
+  /* content: "--------------->" !important;
+  height: 1px !important;
+  width: 100% !important;
+  left: 1em !important;
+  position: relative !important; */
+}
+
+.toProvince::before {
+  color: var(--thema-color);
+  content: "";
+  height: 1px;
+  left: 15;
+  margin-top: -1px;
+  position: absolute;
+  display: block;
+  top: 50%;
+  width: 50%;
+}
+
+.filter-voyage {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.filter-voyage:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.voyage-info.info {
+  width: 100%;
+}
+
+.voyage-info.info>div {
+  width: 40%;
+  display: flex;
+}
+
+.voyage-info.info .voyage-info.from span::after {
+  content: "→";
+  position: absolute;
+  margin-left: 0.7em;
+}
+
+.voyage-info.info .voyage-info.fee {
+  text-align: end;
+}
+
+.voyage-info.info .voyage-info.fee span {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.voyage-info.filteredVoyageList {
+  width: 50%;
+}
+
+.voyage-info.allVoyageList {
+  width: 35%;
+}
+
+.voyage-info.from span,
+.to span {
+  font-weight: bold;
+  display: inline;
+  text-transform: capitalize;
+}
+
+.voyage-info.from span {
+  margin-left: 10px;
+}
+
+.voyage-info.seat.full,
+.seat.empty,
+.seat.time {
+  display: inline;
+}
+
+.voyage-info.seat.full span,
+.seat.empty span,
+.seat.time span {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.voyage-info.seat span,
+.fee span,
+.date span,
+.time span {
+  display: inline;
+}
+
+.full-seats label,
+.remaining-time label,
+.empty-seats label {
+  font-size: small;
+  font-weight: 600;
+}
+
+.voyage-info.filteredVoyageList .voyage-info.from span::after {
+  content: "→";
+  position: absolute;
+  margin-left: 7px;
+}
+
+.voyage-info.allVoyageList .voyage-info.from span::after {
+  content: "→";
+  position: absolute;
+  margin-left: 0.6em;
+}
+
+.buy-ticket-user-info {
+  height: fit-content;
 }

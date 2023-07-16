@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import Router from 'next/router'
 import Cookies from "js-cookie";
 

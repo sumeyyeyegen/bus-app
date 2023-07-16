@@ -1,19 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 interface BuyTicketState {
-  selectedVoyage: any
+  selectedVoyage: any,
+  clickList: Array<Object>,
+  selectedSeat: string | number | undefined,
+  filterError: string,
+  filteredVoyageList: Array<any>
 }
 
 const initialState: BuyTicketState = {
-  selectedVoyage: ""
+  selectedVoyage: "",
+  clickList: [],
+  selectedSeat: "",
+  filterError: "",
+  filteredVoyageList: []
 }
 
-export const buyTicketReducer = createSlice({
+export const buyTicketReducer: any = createSlice({
   name: 'buyTicket',
   initialState: initialState,
   reducers: {
     setSelectedVoyage: (state, payload) => {
       state.selectedVoyage = payload.payload;
+    },
+    setClickList: (state, payload) => {
+      state.clickList = payload.payload;
+    },
+    setSelectedSeat: (state, payload) => {
+      state.selectedSeat = payload.payload;
+    },
+    setFilterError: (state, payload) => {
+      state.filterError = payload.payload;
+    },
+    setFilteredVoyageList: (state, payload) => {
+      state.filteredVoyageList = payload.payload;
     }
   },
 
@@ -21,6 +41,6 @@ export const buyTicketReducer = createSlice({
   }
 })
 
-export const { setSelectedVoyage } = buyTicketReducer.actions
+export const { setSelectedVoyage, setClickList, setSelectedSeat, setFilterError, setFilteredVoyageList } = buyTicketReducer.actions
 
 export default buyTicketReducer.reducer

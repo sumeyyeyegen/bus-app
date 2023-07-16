@@ -53,6 +53,7 @@ function Login() {
         router.push(returnUrl);
       })
       .catch((error: any) => {
+        error.message === "Network Error" && Alert().Error("Sunucuda bir problem oluştu");
         error.response.data.message === "Bu mail adresi ile kayıtlı bir kullanıcı bulunamadı" ? (Alert().Error("Bu mail adresi ile kayıtlı bir kullanıcı bulunamadı"), router.push("/register")) : ""
 
         setError('apiError', { message: error.message });

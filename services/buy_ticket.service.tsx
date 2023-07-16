@@ -1,5 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
-import Router from 'next/router'
 import Cookies from "js-cookie";
 
 import { fetchWrapper } from '../helpers';
@@ -10,12 +8,20 @@ const url = "http://localhost:83/api"
 interface Values {
   from: string,
   to: string,
-  day: string|undefined,
-  time: string|undefined
+  day: string | undefined,
+  time: string | undefined
+}
+
+interface InsertValues {
+  travel_id: number,
+  bus_id: number,
+  gender: boolean,
+  no: number
 }
 
 export const buyTicketService = {
-  filter
+  filter,
+  buyTicket
 };
 
 function filter(data: Values) {
@@ -24,3 +30,9 @@ function filter(data: Values) {
   })
 }
 
+function buyTicket(data: InsertValues) {
+  let token = Cookies.get("user-token");
+  return fetchWrapper.post(`${url}/voyage/buy-ticket`, token, data).then(res => {
+    return res;
+  })
+}

@@ -4,13 +4,13 @@ import Cookies from 'js-cookie';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState, FC } from 'react';
-import { useDispatch } from 'react-redux';
 import BusIdentification from '../components/BusIdentification';
-import ExpeditionDef from '../components/ExpeditionDef';
+import VoyageDef from '../components/VoyageDef';
 import SubHeader from '../components/SubHeader';
 import { fetchWrapper } from '../helpers';
+import { useAppDispatch } from '../redux/hooks';
 import { setBrandList, setModelList, setPropList, setTypeList } from '../redux/reducers/BusReducer';
-import { setLocationList, setVoyageList } from '../redux/reducers/ExpeditionReducer';
+import { setLocationList, setVoyageList } from '../redux/reducers/VoyageReducer';
 
 import { authService } from '../services';
 import styles from '../styles/Home.module.css'
@@ -111,7 +111,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 }
 
 const Home: FC<any> = ({ allBrands, allProps, allTypes, busList, locations, voyageList }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("tab1")
 
@@ -143,7 +143,7 @@ const Home: FC<any> = ({ allBrands, allProps, allTypes, busList, locations, voya
       <div className="card">
         <div className="card-body">
           {
-            activeTab === "tab1" ? <BusIdentification /> : activeTab === "tab2" && <ExpeditionDef busList={busList} />
+            activeTab === "tab1" ? <BusIdentification /> : activeTab === "tab2" && <VoyageDef busList={busList} />
           }
 
         </div>

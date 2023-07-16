@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { expeditionService } from "../services";
+import { voyageService } from "../services";
 import styles from '../styles/Modal.module.css';
 
 interface Values {
@@ -15,7 +15,7 @@ const Modal = ({ hide, modalInfo }: PropTypes) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   function onSubmit() {
-    expeditionService.deleteExpedition(modalInfo.id).then(res => {
+    voyageService.deleteVoyage(modalInfo.id).then(res => {
       console.log(res);
     })
     // modalInfo.id
@@ -54,7 +54,7 @@ const Modal = ({ hide, modalInfo }: PropTypes) => {
             </div>
             <div className="form-group">
               <label htmlFor="">Toplam Kazanılan Para : </label>
-              <p>{Math.floor(6 * Number(modalInfo?.fee))}</p>
+              <p>{Math.floor(6 * Number(modalInfo?.fee))}₺</p>
             </div>
             <div className="form-group">
               <label htmlFor="">Boş Koltuk : </label>

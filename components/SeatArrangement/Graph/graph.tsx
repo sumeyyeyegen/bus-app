@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { isTemplateExpression } from 'typescript';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setSeats } from '../../../redux/reducers/BusReducer';
+import { setClickList, setSelectedSeat } from '../../../redux/reducers/BuyTicketReducer';
 import Seat1 from './Seat1';
 
 function Graph({ seatNumber }: any) {
   const { busInsertRes, selectedType, seats, edit } = useAppSelector((state: any) => state.bus)
-  const { selectedVoyage } = useAppSelector((state: any) => state.buyTicket)
+  const { selectedVoyage, clickList, selectedSeat } = useAppSelector((state: any) => state.buyTicket)
   const createRef = useRef(false);
+
 
   const dispatch: any = useAppDispatch();
 
@@ -23,36 +26,6 @@ function Graph({ seatNumber }: any) {
   useEffect(() => {
     edit ? createSeatsList() : createSeatsList()
   }, [seatNumber, busInsertRes, selectedType])
-
-  // function hesaplaLeft(idx: number) {
-  //   let kalan = (idx + 1) % 4;
-  //   if (kalan === 1) {
-  //     return 47 * 0;
-  //   }
-  //   else if (kalan === 2) {
-  //     return 47 * 1;
-  //   }
-  //   else if (kalan === 3) {
-  //     return 47 * 2;
-  //   }
-  //   else if (kalan === 0) {
-  //     return 47 * 3;
-  //   }
-  //   // return 5
-  // }
-
-  // function hesaplaTop(idx: number) {
-  //   let bolum = Math.floor((idx + 1) / 4);
-  //   let kalan = (idx + 1) % 4;
-
-  //   if (bolum > 0 && kalan > 0) {
-  //     return 47 * bolum;
-  //   } else if (bolum === 0 && kalan > 0) {
-  //     return 0;
-  //   } else if (bolum > 0 && kalan === 0) {
-  //     return 47 * (bolum - 1);
-  //   }
-  // }
 
   function hesaplaLeft(idx: number) {
     let bolum = Math.floor((idx + 1) / 3);
@@ -94,22 +67,6 @@ function Graph({ seatNumber }: any) {
       return 47 * (bolum - 1);
     }
   }
-
-  // function displayNone(idx: number) {
-  //   let kalan = (idx + 1) % 4;
-  //   if (kalan === 1) {
-  //     return "block";
-  //   }
-  //   else if (kalan === 2) {
-  //     return "none";
-  //   }
-  //   else if (kalan === 3) {
-  //     return "block";
-  //   }
-  //   else if (kalan === 0) {
-  //     return "block";
-  //   }
-  // }
 
   function hesaplaLeftForSelectType2(idx: number) {
     let bolum = Math.floor((idx + 1) / 4);
@@ -157,35 +114,69 @@ function Graph({ seatNumber }: any) {
     }
   }
 
-  const [clickList, setClickList] = useState<any>()
-
   function createClickList() {
-    let createList = seats.map((item: any) => { return { id: item.id, clicked: false } })
+    let createList = seats.map((item: any) => { return { id: item.id, clicked: false, gender: 0 } })
     console.log(createList);
-    setClickList([...createList]);
+    dispatch(setClickList([...createList]));
 
   }
-
-  useEffect(() => {
-    console.log(clickList);
-
-  }, [clickList])
 
   useEffect(() => {
     createClickList();
   }, [])
 
-  function handleClick(id: any) {
-    let nextClickList = clickList.map((item: any) => item.id === id ? { id: id, clicked: !item.clicked } : item);
+  function test() {
+    let seatList = selectedVoyage.seats[0].seat_properties;
+    console.log(seatList);
+    for (let i = 0; i < clickList.length; i++) {
+      for (let j = 0; j < seatList.length; j++) {
+        if (Number(clickList[i].id + 1) === Number(seatList[j].no)) {
+          if (seatList[j].gender === true) {
+            console.log("test", seatList[j].gender);
 
+            return { id: clickList[i].id, clicked: clickList[i].clicked, gender: true }
+          } else {
+            console.log("test1", seatList[j].gender);
+            return { id: clickList[i].id, clicked: clickList[i].clicked, gender: false }
+          }
+        } else {
+          console.log("test2", seatList[j].gender);
+          return { id: clickList[i].id, clicked: clickList[i].clicked, gender: 0 }
+        }
+      }
+    }
+
+  }
+  const [nextArr, setNextArr] = useState<any[]>([])
+  useEffect(() => {
+    let bashData = nextArr;
+    let data: any = "";
+    data = test();
+    bashData.push(data);
+    console.log(bashData);
+
+
+  }, [clickList, selectedSeat])
+
+  useEffect(() => {
     console.log(clickList);
+    console.log(selectedSeat);
 
+  }, [clickList, selectedSeat])
 
-    setClickList([...nextClickList]);
+  useEffect(() => {
+    createClickList();
+  }, [selectedVoyage])
+
+  function handleClick(id: any) {
+
+    let nextClickList = clickList.map((item: any) => item.id === id ? ({ id: id, clicked: !item.clicked, gender: item.gender }) : item);
+    dispatch(setClickList([...nextClickList]));
+    dispatch(setSelectedSeat(id + 1));
   }
 
   return (
-    <div className="otobus-div koltuklar d-flex justify-content-center">
+    <div className="bus seats d-flex justify-content-center mt-3 mt-lg-0" style={{ margin: "0 auto", flexWrap: "wrap" }}>
       {
         selectedType === 1 ? seats.length > 0 ? seats.map((item: any, idx: any) => {
           return <Seat1 clickList={clickList} handleClick={handleClick} hesaplaLeft={hesaplaLeft} hesaplaTop={hesaplaTop} key={idx} idx={idx} id={item.id} selected={item.selected} selectedType={selectedType} />

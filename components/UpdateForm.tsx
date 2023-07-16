@@ -23,7 +23,7 @@ interface Values {
 const UpdateForm = () => {
 
   const [selectedPropertiesList, setSelectedPropertiesList] = React.useState<number[]>([]);
-  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, seatNumber, busUpdateRes, plateNumber, seats } = useAppSelector((state: any) => state.bus)
+  const { selectedBrand, selectedModel, selectedType, brandList, propList, typeList, modelList, seatNumber, busUpdateRes, plateNumber, seats, addingBusInfo } = useAppSelector((state: any) => state.bus)
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -71,11 +71,12 @@ const UpdateForm = () => {
 
   const formOptions = { resolver: yupResolver(validationSchema) };
 
-  const { register, handleSubmit, reset, setError, formState } = useForm(formOptions);
+  const { register, setError, formState } = useForm(formOptions);
   const { errors } = formState;
 
   function onSubmit(data: Values) {
-    let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: data.number_of_seats, type: data.type, properties: data.properties };
+    let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: seats.length, type: data.type, properties: data.properties };
+
     return busService.updateBus(dat)
       .then((res: any) => {
         dispatch(setBusUpdateRes(res.data));
@@ -89,7 +90,7 @@ const UpdateForm = () => {
     if (selectedBrand !== undefined) {
       dispatch(fetchModelById(selectedBrand))
     }
-  }, [selectedBrand])
+  }, [])
 
   useEffect(() => {
     if (busUpdateRes.message === "Bus created") {
@@ -101,17 +102,56 @@ const UpdateForm = () => {
 
 
   function increment() {
-    dispatch(setSeats([...seats, { id: seats.length, value: seats.length + 1, height: 3, width: 3, free: 0}]));
+    dispatch(setSeats([...seats, { id: seats.length, value: seats.length + 1, height: 3, width: 3, free: 0 }]));
+    let data = addingBusInfo;
+    let seat = addingBusInfo.number_of_seats;
+
+
+    let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: Math.floor(seats.length + 1), type: data.type, properties: data.properties };
+
+    console.log(dat);
+
+    busService.updateBus(dat)
+      .then((res: any) => {
+        console.log(res);
+
+        dispatch(setBusUpdateRes(res.data));
+      })
+      .catch((error: any) => {
+        console.log(error);
+
+        setError('apiError', { message: error.message });
+      });
 
   }
   function decrement() {
     let filteredData = seats.filter((item: any) => item.id !== seats.length - 1);
     dispatch(setSeats([...filteredData]));
+
+    let data = addingBusInfo;
+    let seat = addingBusInfo.number_of_seats;
+
+    let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: Math.floor(seats.length + 1), type: data.type, properties: data.properties };
+
+    console.log(dat);
+
+    busService.updateBus(dat)
+      .then((res: any) => {
+        console.log(res);
+
+        dispatch(setBusUpdateRes(res.data));
+      })
+      .catch((error: any) => {
+        console.log(error);
+
+        setError('apiError', { message: error.message });
+      });
+
   }
 
   return (
     <Formik
-      initialValues={{ plate_number: plateNumber, model_id: selectedModel, number_of_seats: seatNumber, type: selectedType, properties: [...selectedPropertiesList] }}
+      initialValues={{ plate_number: plateNumber, brand: selectedBrand, model_id: selectedModel, number_of_seats: seatNumber, type: selectedType, properties: selectedPropertiesList }}
       onSubmit={(values: Values) => onSubmit(values)}
       validationSchema={validationSchema}
     >
@@ -155,13 +195,13 @@ const UpdateForm = () => {
                         id="demo-simple-select"
                         required={true}
                         value={selectedModel}
-                        label="Marka"
+                        label="Model"
                         {...register("model_id")}
                         onChange={(e) => { handleChange(e); handleChangeModel(e) }}
                       >
                         {
                           modelList.length > 0 ? modelList.map((model: any) => {
-                            return <MenuItem key={model.id} value={model.id}>{model.name}</MenuItem>
+                            return <MenuItem key={model.id} value={model.id}>{model.value}</MenuItem>
                           }) : ""
                         }
 
@@ -173,7 +213,7 @@ const UpdateForm = () => {
                   </div>
                   <div className="form-group">
                     <FormControl fullWidth>
-
+                      <InputLabel id="demo-simple-select-label">Tip</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
@@ -183,9 +223,10 @@ const UpdateForm = () => {
                         {...register("type")}
                         onChange={(e) => { handleChange(e); handleChangeType(e) }}
                       >
+                        {console.log(typeList)}
                         {
                           typeList.length > 0 ? typeList.map((type: any) => {
-                            return <MenuItem key={type.id} value={type.id}>{type.name}</MenuItem>
+                            return <MenuItem key={type.id} value={type.id}>{type.value}</MenuItem>
                           }) : ""
                         }
 
@@ -207,7 +248,7 @@ const UpdateForm = () => {
                       >
                         {
                           propList.length > 0 ? propList.map((prop: any) => {
-                            return <MenuItem key={prop.id} value={prop.id}>{prop.name}</MenuItem>
+                            return <MenuItem key={prop.id} value={prop.id}>{prop.value}</MenuItem>
                           }) : ""
                         }
 
@@ -230,9 +271,11 @@ const UpdateForm = () => {
                 </Form>
               </div>
             </div>
-            <div className="col-12 col-md-7">
-              <button onClick={() => increment()}>+</button>
-              <button onClick={() => decrement()}>-</button>
+            <div className="col-12 col-md-7 w-100">
+              <div className=" w-100 d-flex justify-content-end">
+                <button className=' btn btn-outline-secondary mr-2 increment-button' onClick={() => increment()}>+</button>
+                <button className='btn btn-outline-secondary mr-2 decrement-button' onClick={() => decrement()}>-</button>
+              </div>
               <Graph seatNumber={seatNumber} />
             </div>
           </div>

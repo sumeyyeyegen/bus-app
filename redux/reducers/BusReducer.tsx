@@ -17,7 +17,8 @@ interface BusState {
   busUpdateRes: any,
   plateList: Array<any>,
   plateNumber: any,
-  seats: Array<any>
+  seats: Array<any>,
+  addingBusInfo:Object
 }
 
 // Define the initial state using that type
@@ -36,7 +37,8 @@ const initialState: BusState = {
   busUpdateRes: "",
   plateList: [],
   plateNumber: "",
-  seats: []
+  seats: [],
+  addingBusInfo:{}
 }
 
 export const fetchModelById = createAsyncThunk(
@@ -96,6 +98,9 @@ export const busReducer = createSlice({
     },
     setSeats: (state, payload) => {
       state.seats = payload.payload;
+    },
+    setAddingBusInfo: (state,payload) =>{
+      state.addingBusInfo = payload.payload;
     }
   },
 
@@ -110,6 +115,6 @@ export const busReducer = createSlice({
   }
 })
 
-export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setPlateList, setPlateNumber, setSeats } = busReducer.actions
+export const { setSelectedBrand, setBrandList, setPropList, setTypeList, setSelectedModel, setModelList, setSelectedProp, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setBusUpdateRes, setPlateList, setPlateNumber, setSeats,setAddingBusInfo } = busReducer.actions
 
 export default busReducer.reducer

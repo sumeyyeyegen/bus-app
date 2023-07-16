@@ -11,23 +11,32 @@ interface Values {
   day: string,
   handleClick: Function | undefined,
   id: any,
-  seatCount: number
+  seatCount: number,
+  voyageId: number,
+  seats: Array<any>
 }
 
-const VoyageListItem = ({ from, to, type, fee, day, handleClick, id, seatCount }: Values) => {
+const VoyageListItem = ({ from, to, type, fee, day, handleClick, id, seatCount, voyageId, seats }: Values) => {
   const dispatch = useAppDispatch();
 
   return (
     <><ListItem
+      sx={{ display: "block" }}
       disableGutters
-      onClick={() => handleClick !== undefined ? handleClick({ id: id, from: from, to: to, type: type, fee: fee, day: day, seatCount: seatCount }) : dispatch(setSelectedVoyage({ id: id, from: from, to: to, type: type, fee: fee, day: day, seatCount: seatCount }))}
+      onClick={() => handleClick !== undefined ? handleClick({ id: id, from: from, to: to, type: type, fee: fee, day: day, seatCount: seatCount }) : dispatch(setSelectedVoyage(JSON.parse(JSON.stringify({ id: id, from: from, to: to, type: type, fee: fee, day: day, seatCount: seatCount, voyageId: voyageId,seats:seats }))))}
     >
-      <ListItemText sx={{ textTransform: "capitalize", padding: "1em" }} primary={from} />
-      <ListItemText sx={{ textTransform: "capitalize" }} primary={to} />
-      <ListItemText sx={{ textTransform: "capitalize" }} primary={type} />
-      <ListItemText sx={{ textTransform: "capitalize" }} primary={fee} />
-      <ListItemText sx={{ textTransform: "capitalize" }} primary={day?.slice(0, 10)} />
-      <ListItemText sx={{ textTransform: "capitalize" }} primary={day?.slice(12, 16)} />
+      <div className={`d-flex justify-content-start align-items-center voyage-info ${handleClick !== undefined ? "allVoyageList" : "filteredVoyageList"}`}>
+        <ListItemText className='voyage-info from' primary={from} />
+        <ListItemText className='voyage-info to' sx={{ textTransform: "capitalize" }} primary={to} />
+      </div>
+      <div className="d-block">
+        <div className='d-flex align-items-center' style={{ marginLeft: "1.5em" }}>
+          <ListItemText className='voyage-info seat' primary={type} />
+          <ListItemText className='voyage-info fee' primary={`${fee} ₺`} />
+          <ListItemText className='voyage-info date' primary={day?.slice(0, 10).split("-").reverse().join("/")} />
+          <ListItemText className='voyage-info time' primary={day?.slice(12, 16)} />
+        </div>
+      </div>
     </ListItem></>
   )
 }

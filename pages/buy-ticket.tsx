@@ -3,11 +3,16 @@ import Cookies from 'js-cookie'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import BuyTicketComponent from '../components/BuyTicket'
+import BuyTicketComponent from '../components/BuyTicket/BuyTicket'
+import FilterVoyage from '../components/BuyTicket/FilterVoyage'
 import SubHeader from '../components/SubHeader'
-import { useAppDispatch } from '../redux/hooks'
-import { setLocationList } from '../redux/reducers/ExpeditionReducer'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { setLocationList } from '../redux/reducers/VoyageReducer'
 import styles from '../styles/BuyTicket.module.css'
+import VoyageListComponent from '../components/VoyageList';
+import VoyageInfoCard from '../components/BuyTicket/VoyageInfoCard'
+import Graph from '../components/SeatArrangement/Graph/graph'
+import { setSelectedVoyage } from '../redux/reducers/BuyTicketReducer'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   // const { params, res } = context.query;
@@ -46,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 }
 
 const BuyTicket = ({ locations }: any) => {
+  const { selectedVoyage, filteredVoyageList } = useAppSelector((state: any) => state.buyTicket)
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState("tab2")
   const router = useRouter();
@@ -54,12 +60,12 @@ const BuyTicket = ({ locations }: any) => {
   useEffect(() => {
     let userToken = Cookies.get("user-token");
     setToken(userToken);
+    dispatch(setSelectedVoyage(""));
   }, []);
 
   useEffect(() => {
     dispatch(setLocationList(locations))
   }, [locations])
-
 
   return (
     <div className={styles.container}>
@@ -79,7 +85,22 @@ const BuyTicket = ({ locations }: any) => {
       <div className="card">
         <div className="card-body">
           {
-            activeTab === "tab2" && <BuyTicketComponent />
+            activeTab === "tab2" && <div className='row m-0 w-100'>
+              <div className="col-12 col-lg-5">
+
+                <FilterVoyage />
+                <VoyageListComponent handleClick={undefined} voyageList={filteredVoyageList} />
+
+              </div>
+              <div className='col-12 col-lg-7'>
+                {selectedVoyage !== "" ? <div className="w-100 m-0 mt-3 mt-lg-0">
+                  <VoyageInfoCard />
+                  <BuyTicketComponent />
+                </div>
+                  : ""
+                }
+              </div>
+            </div>
           }
 
         </div>

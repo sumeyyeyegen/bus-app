@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import busReducer from './reducers/BusReducer'
 import buyTicketReducer from './reducers/BuyTicketReducer'
-import expeditionReducer from './reducers/ExpeditionReducer'
+import voyageReducer from './reducers/VoyageReducer'
 import graphReducer from './reducers/GraphReducer'
 import homeReducer from './reducers/HomeReducer'
 
@@ -11,7 +11,7 @@ const store = configureStore({
     home: homeReducer,
     bus: busReducer,
     graph: graphReducer,
-    expedition: expeditionReducer,
+    voyage: voyageReducer,
     buyTicket: buyTicketReducer
   }
 })

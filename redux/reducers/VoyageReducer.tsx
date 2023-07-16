@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import dayjs, { Dayjs } from 'dayjs';
-interface ExpeditionState {
-  expeditionInsertRes: any,
+interface VoyageState {
+  voyageInsertRes: any,
   selectedBus: Object,
   fee: number | string,
   fromProvince: number | string,
@@ -12,8 +12,8 @@ interface ExpeditionState {
 }
 
 
-const initialState: ExpeditionState = {
-  expeditionInsertRes: "",
+const initialState: VoyageState = {
+  voyageInsertRes: "",
   selectedBus: "",
   fee: "",
   fromProvince: "",
@@ -22,12 +22,12 @@ const initialState: ExpeditionState = {
   locationList: [],
   voyageList: []
 }
-export const expeditionReducer = createSlice({
-  name: 'expedition',
+export const voyageReducer = createSlice({
+  name: 'voyage',
   initialState: initialState,
   reducers: {
-    setExpeditionInsertRes: (state, payload) => {
-      state.expeditionInsertRes = payload.payload;
+    setVoyageInsertRes: (state, payload) => {
+      state.voyageInsertRes = payload.payload;
     },
     setSelectedBus: (state, payload) => {
       state.selectedBus = payload.payload;
@@ -57,6 +57,6 @@ export const expeditionReducer = createSlice({
   }
 })
 
-export const { setExpeditionInsertRes, setSelectedBus, setFee, setFromProvince, setToProvince, setDateExp, setLocationList, setVoyageList } = expeditionReducer.actions
+export const { setVoyageInsertRes, setSelectedBus, setFee, setFromProvince, setToProvince, setDateExp, setLocationList, setVoyageList } = voyageReducer.actions
 
-export default expeditionReducer.reducer
+export default voyageReducer.reducer

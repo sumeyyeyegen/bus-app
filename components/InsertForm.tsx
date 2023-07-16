@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { Form, Formik } from 'formik';
 import { FormItem } from './FormItem';
-import { setSelectedBrand, fetchModelById, setSelectedModel, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setPlateNumber } from '../redux/reducers/BusReducer';
+import { setSelectedBrand, fetchModelById, setSelectedModel, setSelectedType, setBusInsertRes, setEdit, setSeatNumber, setPlateNumber, setAddingBusInfo } from '../redux/reducers/BusReducer';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { busService } from '../services/bus.service';
@@ -80,6 +80,9 @@ const InsertForm = () => {
 
   function onSubmit(data: Values) {
     let dat = { plate_number: data.plate_number, model_id: data.model_id, number_of_seats: data.number_of_seats, type: data.type, properties: data.properties };
+
+    dispatch(setAddingBusInfo(JSON.parse(JSON.stringify(dat))))
+
     return busService.insertBus(dat)
       .then((res: any) => {
         dispatch(setBusInsertRes(res.data));
@@ -230,9 +233,9 @@ const InsertForm = () => {
                 </Form>
               </div>
             </div>
-            <div className="col-12 col-md-6 d-flex justify-content-center">
+            {/* <div className="col-12 col-md-6 d-flex justify-content-center">
               <Graph seatNumber="26" />
-            </div>
+            </div> */}
           </div>
         )
       }
